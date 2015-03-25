@@ -1,12 +1,15 @@
 package com.trainer.g14.g_trainer;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -48,6 +51,17 @@ public class home extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+
+    public void onResume() {
+        super.onResume();
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String name = SP.getString("name_text", "");
+        // Create the text view
+        TextView textView = (TextView) getActivity().findViewById(R.id.welcome);
+        textView.setText("Welcome "+name+"!");
 
     }
 
