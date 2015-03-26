@@ -20,7 +20,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.trainer.g14.g_trainer.database.DB;
+import com.trainer.g14.g_trainer.database.Location;
+
+import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity
@@ -216,4 +221,5 @@ public class MainActivity extends ActionBarActivity
         } else {
             // error opening DB.
         }
+    }
 }

@@ -6,17 +6,19 @@ package com.trainer.g14.g_trainer.database;
 public class Location {
 
     public int id;
-    public double lat,lng;
+    public double lat, lng;
     public String name;
 
-    public Location(){}
+    public Location() {
+    }
 
     @Override
-    public String toString() {
+    //public String toString() {
         public String toString() {
             return "Location [id=" + id
                     + ",name=" + name
                     + ",lat=" + lat
-                    + ",lng=" + lng+"]";
+                    + ",lng=" + lng + "]";
         }
-    }
+    //}
+}
