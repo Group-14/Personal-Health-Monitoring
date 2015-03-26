@@ -192,4 +192,28 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
+    public void testPreLoadedSQLiteDb() {
+
+        DB db = new DB(this);
+
+        // copy assets DB to app DB.
+        try {
+            db.create();
+        } catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        }
+
+
+        // get all locations
+        if (db.open()) {
+
+            List<Location> locations = db.getLocations();
+
+            double lat = locations.get(0).lat;
+            String name = locations.get(0).name;
+
+        } else {
+            // error opening DB.
+        }
 }
