@@ -35,8 +35,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Total Calories Burned:"
             android:id="@+id/textView9"
-            android:layout_marginTop="49dp"
-            android:layout_below="@+id/textView8"
+            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
 
         <TextView
@@ -46,6 +45,16 @@
             android:text="Medium Text"
             android:id="@+id/welcome"
             android:layout_below="@+id/hi"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Google Fit Status: "
+            android:id="@+id/fitconnect"
+            android:layout_marginTop="74dp"
+            android:layout_below="@+id/textView9"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </FrameLayout>

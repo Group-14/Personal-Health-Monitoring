@@ -18,7 +18,8 @@
         </activity>
         <activity
             android:name=".trainer"
-            android:label="@string/title_activity_trainer" >
+            android:label="@string/title_activity_trainer"
+            android:screenOrientation="portrait">
             android:parentActivityName="com.trainer.g14.MainActivity" >
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
