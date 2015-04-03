@@ -18,5 +18,29 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/result"
+            android:layout_marginBottom="85dp"
+            android:lines="4"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:gravity="center_horizontal" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/historyList"
+            android:layout_below="@+id/textView4"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:layout_above="@+id/result"
+            android:choiceMode="singleChoice" />
+
     </RelativeLayout>
 </FrameLayout>

@@ -28,8 +28,6 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.fitness.Fitness;
-import com.trainer.g14.g_trainer.database.DB;
-import com.trainer.g14.g_trainer.database.Location;
 
 import java.io.IOException;
 import java.net.URI;
@@ -69,6 +67,9 @@ public class MainActivity extends ActionBarActivity
         // Connect to the Fitness API
         Log.i(TAG, "Connecting...");
         mClient.connect();
+        // Setup Database
+        setupDB setup=new setupDB(getApplicationContext());
+        setup.setup();
     }
 
     @Override
@@ -260,30 +261,6 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    public void testPreLoadedSQLiteDb() {
-
-        DB db = new DB(this);
-
-        // copy assets DB to app DB.
-        try {
-            db.create();
-        } catch (IOException ioe) {
-            throw new Error("Unable to create database");
-        }
-
-
-        // get all locations
-        if (db.open()) {
-
-            List<Location> locations = db.getLocations();
-
-            double lat = locations.get(0).lat;
-            String name = locations.get(0).name;
-
-        } else {
-            // error opening DB.
-        }
-    }
 
     /**
      *  Build a {@link GoogleApiClient} that will authenticate the user and allow the application

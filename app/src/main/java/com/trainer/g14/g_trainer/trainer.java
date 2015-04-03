@@ -1,5 +1,6 @@
 package com.trainer.g14.g_trainer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.drawable.Drawable;
@@ -30,11 +31,12 @@ import com.google.android.gms.fitness.data.Value;
 import com.google.android.gms.fitness.request.OnDataPointListener;
 import com.google.android.gms.fitness.request.SensorRequest;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class trainer extends ActionBarActivity
     implements OnDataPointListener{
-    String type;
+    String routine;
     private Button pause;
     private Button stop;
     private boolean Pause=false;
@@ -43,8 +45,13 @@ public class trainer extends ActionBarActivity
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private TextView textView2;
+    private TextView textView3;
 
     private static final int REQUEST_OAUTH = 1;
+
+    private List<exercise> regiment;
+
+    private boolean listener=false;
 
     /**
      *  Track whether an authorization activity is stacking over the current activity, i.e. when
@@ -61,6 +68,7 @@ public class trainer extends ActionBarActivity
         // Connect to the Fitness API
         Log.i(TAG, "Connecting...");
         mClient.connect();
+
     }
 
     @Override
@@ -70,40 +78,13 @@ public class trainer extends ActionBarActivity
         buildFitnessClient();
 
         setContentView(R.layout.activity_trainer);
-        Intent intent = getIntent();
-        type = intent.getStringExtra(workout.TYPE);
-
-        // Create the text view
-        TextView textView = (TextView) findViewById(R.id.name);
-        textView.setText("Current Exercise:");
-
         textView2 = (TextView) findViewById(R.id.progress);
+        textView3 = (TextView) findViewById(R.id.exercise);
 
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        Intent intent = getIntent();
+        routine = intent.getStringExtra("rt");
 
-        //show pic of exercise
-        ImageView picture = (ImageView) findViewById(R.id.pic);
-        Drawable[] drawables = new Drawable[] {
-                getResources().getDrawable(R.drawable.run),
-        };
-        picture.setImageDrawable(drawables[0]);
-
-        /*mListener = new OnDataPointListener() {
-            @Override
-            public void onDataPoint(DataPoint dataPoint) {
-                final int steps = dataPoint.getValue(Field.FIELD_STEPS).asInt();
-                runOnUiThread(new Runnable(){
-                    public void run() {
-                        while(!Pause) {
-                            Log.i(TAG, "Detected DataPoint value: " + steps);
-                            TextView textView = (TextView) findViewById(R.id.progress);
-                            textView.setText("Steps: " + steps);
-                        }
-
-                    }
-                });
-            }
-        };*/
+        regiment = workout.workout;
 
         addListener();
         pause = (Button) findViewById(R.id.pause);
@@ -128,6 +109,25 @@ public class trainer extends ActionBarActivity
                 removeListener();
             }
         });
+
+        updateExercise();
+    }
+
+    private void updateExercise(){
+        int index=0;
+        // Create the text view
+        textView3.setText(regiment.get(index).getName()
+                + " Reps: " + regiment.get(index).getReps()
+                + " Sets: " + regiment.get(index).getSets());
+
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+
+        //show pic of exercise
+        ImageView picture = (ImageView) findViewById(R.id.pic);
+        Drawable[] drawables = new Drawable[] {
+                getResources().getDrawable(R.drawable.run),
+        };
+        picture.setImageDrawable(drawables[0]);
     }
 
     @Override
@@ -171,6 +171,7 @@ public class trainer extends ActionBarActivity
     }
 
     private void addListener(){
+        if(listener) return;
         Fitness.SensorsApi.add(
                 mClient,
                 new SensorRequest.Builder()
@@ -188,9 +189,11 @@ public class trainer extends ActionBarActivity
                 }
             }
         });
+        listener = true;
     }
 
     private void removeListener(){
+        if(!listener) return;
         Fitness.SensorsApi.remove(
                 mClient,
                 this)
@@ -204,6 +207,7 @@ public class trainer extends ActionBarActivity
                         }
                     }
                 });
+        listener = false;
     }
 
     @Override

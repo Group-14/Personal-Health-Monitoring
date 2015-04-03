@@ -4,9 +4,20 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import sqlite.helper.DatabaseHelper2;
+import sqlite.model.History;
 
 
 /**
@@ -18,25 +29,16 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class journal extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    //private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    //private String mParam1;
-    //private String mParam2;
+    private ListView listView;
+    private DatabaseHelper2 db;
+    private View lastSelectedView=null;
+    private TextView stats;
+    private List<History> hlist;
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment journal.
-     */
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     // TODO: Rename and change types and number of parameters
     public static journal newInstance() {
         journal fragment = new journal();
@@ -63,8 +65,66 @@ public class journal extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_journal, container, false);
+        View view = inflater.inflate(R.layout.fragment_journal, container, false);
+
+        listView = (ListView) view.findViewById(R.id.historyList);
+        //listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        stats = (TextView) view.findViewById(R.id.result);
+        stats.setText("Results from Selected Date: ");
+
+        hlist = db.getAllHistory();
+        List<String> values = new ArrayList<String>();
+        for(int q=hlist.size()-1; q>-1; q--){
+            values.add(hlist.get(q).getDate());
+        }
+        final int size=hlist.size()-1;
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+
+
+        // Assign adapter to ListView
+        listView.setAdapter(adapter);
+
+        // ListView Item Click Listener
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                listView.setItemChecked(position, true);
+                clearSelection();
+                lastSelectedView=view;
+                view.setBackgroundColor(getResources().getColor(R.color.pressed_color));
+                // ListView Clicked item index
+                int itemPosition  = size-position;
+
+                // ListView Clicked item value
+                String history    = (String) listView.getItemAtPosition(position);
+                displayStats(itemPosition);
+                // Show Alert
+                Log.i(TAG, "Position: " + position + "  ListItem: " + history);
+                //Toast.makeText(getApplicationContext(),
+                //        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
+                //        .show();
+
+            }
+
+        });
+        return view;
+    }
+
+    private void displayStats(int index){
+        History ayy=hlist.get(index);
+        stats.setText("Results from Selected Date: "
+                + "\nRoutine: "+ayy.getRoutine()
+                + "\nCalories Burned: " + ayy.getCalories()
+                + "\nSteps Taken: " + ayy.getSteps());
+    }
+
+    public void clearSelection(){
+        if(lastSelectedView != null) lastSelectedView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -83,6 +143,7 @@ public class journal extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        db=new DatabaseHelper2(getActivity());
     }
 
     @Override
