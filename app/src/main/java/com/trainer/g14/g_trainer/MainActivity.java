@@ -61,6 +61,8 @@ public class MainActivity extends ActionBarActivity
     private static GoogleApiClient mClient = null;
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private TextView connect;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -76,7 +78,6 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -95,6 +96,12 @@ public class MainActivity extends ActionBarActivity
             authInProgress = savedInstanceState.getBoolean(AUTH_PENDING);
         }
 
+        buildFitnessClient();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         buildFitnessClient();
     }
 
@@ -261,7 +268,6 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-
     /**
      *  Build a {@link GoogleApiClient} that will authenticate the user and allow the application
      *  to connect to Fitness APIs. The scopes included should match the scopes your app needs
@@ -288,8 +294,10 @@ public class MainActivity extends ActionBarActivity
                                 Log.i(TAG, "Connected!!!");
                                 // Now you can make calls to the Fitness APIs.
                                 // Put application specific code here.
-                                TextView textView = (TextView) findViewById(R.id.fitconnect);
-                                textView.setText("Google Fit Status: Connected");
+
+                                //connect = (TextView) findViewById(R.id.fitconnect);
+                                //connect.setText("Google Fit Status: Connected");
+
                             }
 
                             @Override
@@ -301,8 +309,8 @@ public class MainActivity extends ActionBarActivity
                                 } else if (i == GoogleApiClient.ConnectionCallbacks.CAUSE_SERVICE_DISCONNECTED) {
                                     Log.i(TAG, "Connection lost.  Reason: Service Disconnected");
                                 }
-                                TextView textView = (TextView) findViewById(R.id.fitconnect);
-                                textView.setText("Google Fit Status: Disconnected");
+                                //connect = (TextView) findViewById(R.id.fitconnect);
+                                //connect.setText("Google Fit Status: Disconnected");
                             }
                         }
                 )
@@ -312,8 +320,8 @@ public class MainActivity extends ActionBarActivity
                             @Override
                             public void onConnectionFailed(ConnectionResult result) {
                                 Log.i(TAG, "Connection failed. Cause: " + result.toString());
-                                TextView textView = (TextView) findViewById(R.id.fitconnect);
-                                textView.setText("Google Fit Status: Connection Failed");
+                                //connect = (TextView) findViewById(R.id.fitconnect);
+                                //connect.setText("Google Fit Status: Connection Failed");
                                 if (!result.hasResolution()) {
                                     // Show the localized error dialog
                                     GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(),

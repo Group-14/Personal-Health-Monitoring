@@ -34,11 +34,11 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class workout extends Fragment implements View.OnClickListener{
-    View view;
-    ListView listView;
-    View lastSelectedView=null;
-    DatabaseHelper db;
-    String routine=null;
+    private View view;
+    private ListView listView;
+    private View lastSelectedView=null;
+    private DatabaseHelper db;
+    private String routine=null;
 
     public static List<exercise> workout = new ArrayList<exercise>();
 

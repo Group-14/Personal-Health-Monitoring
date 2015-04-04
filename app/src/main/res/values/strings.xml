@@ -16,5 +16,8 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_trainer">Workout</string>
+    <string name="title_activity_edit">Customize</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

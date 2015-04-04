@@ -19,7 +19,7 @@
         <activity
             android:name=".trainer"
             android:label="@string/title_activity_trainer"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             android:parentActivityName="com.trainer.g14.MainActivity" >
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -29,6 +29,13 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name=".edit"
+            android:label="@string/title_activity_edit" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.trainer.g14.g_trainer.MainActivity" />
         </activity>
     </application>
 

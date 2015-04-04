@@ -1,12 +1,26 @@
 package com.trainer.g14.g_trainer;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import sqlite.helper.DatabaseHelper;
+import sqlite.model.Routine;
 
 
 /**
@@ -18,25 +32,16 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class customize extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    //private static final String ARG_PARAM1 = "param1";
-   //private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    //private String mParam1;
-    //private String mParam2;
+    private ListView listView;
+    private DatabaseHelper db;
+    private View lastSelectedView=null;
+    private View view;
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment customize.
-     */
+    private static final String TAG = MainActivity.class.getSimpleName();
+
+
     // TODO: Rename and change types and number of parameters
     public static customize newInstance() {
         customize fragment = new customize();
@@ -63,8 +68,56 @@ public class customize extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_customize, container, false);
+        view = inflater.inflate(R.layout.fragment_customize, container, false);
+
+        listView = (ListView) view.findViewById(R.id.routineList);
+        //listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        List<Routine> rlist = db.getAllRoutines();
+        List<String> values = new ArrayList<String>();
+        for(Routine r:rlist){
+            values.add(r.getName());
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+
+
+        // Assign adapter to ListView
+        listView.setAdapter(adapter);
+
+        // ListView Item Click Listener
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                listView.setItemChecked(position, true);
+                clearSelection();
+                lastSelectedView=view;
+                view.setBackgroundColor(getResources().getColor(R.color.pressed_color));
+                // ListView Clicked item index
+                int itemPosition  = position;
+
+                // ListView Clicked item value
+                String routine    = (String) listView.getItemAtPosition(position);
+                // Show Alert
+                Log.i(TAG, "Position: " + position + "  ListItem: " + routine);
+                //Toast.makeText(getApplicationContext(),
+                //        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
+                //        .show();
+
+                Intent intent = new Intent(getActivity(), edit.class);
+                intent.putExtra("rt", routine);
+                startActivity(intent);
+            }
+
+        });
+        return view;
+    }
+
+    public void clearSelection(){
+        if(lastSelectedView != null) lastSelectedView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -83,6 +136,7 @@ public class customize extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        db=new DatabaseHelper(getActivity());
     }
 
     @Override

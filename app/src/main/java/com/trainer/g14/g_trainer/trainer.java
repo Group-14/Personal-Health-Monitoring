@@ -81,6 +81,8 @@ public class trainer extends ActionBarActivity
         textView2 = (TextView) findViewById(R.id.progress);
         textView3 = (TextView) findViewById(R.id.exercise);
 
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+
         Intent intent = getIntent();
         routine = intent.getStringExtra("rt");
 
@@ -119,8 +121,6 @@ public class trainer extends ActionBarActivity
         textView3.setText(regiment.get(index).getName()
                 + " Reps: " + regiment.get(index).getReps()
                 + " Sets: " + regiment.get(index).getSets());
-
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
         //show pic of exercise
         ImageView picture = (ImageView) findViewById(R.id.pic);
