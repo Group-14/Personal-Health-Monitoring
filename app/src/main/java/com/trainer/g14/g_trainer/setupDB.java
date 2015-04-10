@@ -36,28 +36,29 @@ public class setupDB {
 
             // core workout
             rt = db.createRoutine(new Routine("Core"));
+            //situps
             rp = db.createRepSet(new RepSet(20, 10));
             exercise = db.createExercise(new Exercise("Sit Ups"));
             db.createExerciseRoutine(exercise, rt, rp);
-
+            //pushups
             exercise = db.createExercise(new Exercise("Push Ups"));
             rp = db.createRepSet(new RepSet(20, 10));
             db.createExerciseRoutine(exercise, rt, rp);
 
             //legs
-            // core workout
             rt = db.createRoutine(new Routine("Legs"));
+            //squats
             rp = db.createRepSet(new RepSet(20, 2));
             exercise = db.createExercise(new Exercise("Squats"));
             db.createExerciseRoutine(exercise, rt, rp);
-
+            //step ups
             exercise = db.createExercise(new Exercise("Step Ups"));
             rp = db.createRepSet(new RepSet(20, 10));
             db.createExerciseRoutine(exercise, rt, rp);
         }
         if(db2.getHistoryCount()==0){
-            db2.createHistory(new History(100,"Core",50,getDateTime()));
-            db2.createHistory(new History(500,"Legs",50,getDateTime()));
+            db2.createHistory(new History(1000,100,"Core",50,getDateTime()));
+            db2.createHistory(new History(980,500,"Legs",50,getDateTime()));
         }
     }
 

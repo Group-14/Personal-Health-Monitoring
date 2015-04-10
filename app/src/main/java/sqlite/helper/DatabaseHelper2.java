@@ -39,7 +39,8 @@ public class DatabaseHelper2 extends SQLiteOpenHelper {
     private static final String KEY_ID = "id";
     private static final String KEY_ROUTINE = "routine";
     private static final String KEY_STEPS = "steps";
-    private static final String KEY_CALORIES = "calories";
+    private static final String KEY_CALORIESIN = "caloriesin";
+    private static final String KEY_CALORIESOUT = "caloriesout";
     private static final String KEY_DATE = "date";
 
 
@@ -47,8 +48,8 @@ public class DatabaseHelper2 extends SQLiteOpenHelper {
     // Todo table create statement
     private static final String CREATE_TABLE_HISTORY = "CREATE TABLE " + TABLE_HISTORY
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_ROUTINE
-            + " TEXT," + KEY_STEPS + " INTEGER," + KEY_CALORIES + " INTEGER,"
-            + KEY_DATE + " STRING" + ")";
+            + " TEXT," + KEY_STEPS + " INTEGER," + KEY_CALORIESIN + " INTEGER,"
+            + KEY_CALORIESOUT + " INTEGER," + KEY_DATE + " STRING" + ")";
 
     public DatabaseHelper2(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -75,7 +76,8 @@ public class DatabaseHelper2 extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_CALORIES, history.getCalories());
+        values.put(KEY_CALORIESIN, history.getCaloriesIn());
+        values.put(KEY_CALORIESOUT, history.getcaloriesOut());
         values.put(KEY_ROUTINE, history.getRoutine());
         values.put(KEY_STEPS, history.getSteps());
         values.put(KEY_DATE, history.getDate());
@@ -106,7 +108,8 @@ public class DatabaseHelper2 extends SQLiteOpenHelper {
         td.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         td.setSteps((c.getInt(c.getColumnIndex(KEY_STEPS))));
         td.setRoutine((c.getString(c.getColumnIndex(KEY_ROUTINE))));
-        td.setCalories((c.getInt(c.getColumnIndex(KEY_CALORIES))));
+        td.setcaloriesIn((c.getInt(c.getColumnIndex(KEY_CALORIESIN))));
+        td.setcaloriesOut((c.getInt(c.getColumnIndex(KEY_CALORIESOUT))));
         td.setDate((c.getString(c.getColumnIndex(KEY_DATE))));
 
         return td;
@@ -131,7 +134,8 @@ public class DatabaseHelper2 extends SQLiteOpenHelper {
                 td.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 td.setSteps((c.getInt(c.getColumnIndex(KEY_STEPS))));
                 td.setRoutine((c.getString(c.getColumnIndex(KEY_ROUTINE))));
-                td.setCalories((c.getInt(c.getColumnIndex(KEY_CALORIES))));
+                td.setcaloriesIn((c.getInt(c.getColumnIndex(KEY_CALORIESIN))));
+                td.setcaloriesOut((c.getInt(c.getColumnIndex(KEY_CALORIESOUT))));
                 td.setDate((c.getString(c.getColumnIndex(KEY_DATE))));
 
                 // adding to todo list
@@ -164,7 +168,8 @@ public class DatabaseHelper2 extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_CALORIES, history.getCalories());
+        values.put(KEY_CALORIESIN, history.getCaloriesIn());
+        values.put(KEY_CALORIESOUT, history.getcaloriesOut());
         values.put(KEY_ROUTINE, history.getRoutine());
         values.put(KEY_STEPS, history.getSteps());
         values.put(KEY_DATE, history.getDate());

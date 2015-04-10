@@ -42,5 +42,30 @@
             android:layout_above="@+id/result"
             android:choiceMode="singleChoice" />
 
+        <EditText
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText21"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="34dp"
+            android:gravity="center_horizontal"
+            android:inputType="number"
+            android:numeric="integer"
+            android:text="Calories In"
+            android:textAlignment="center" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter"
+            android:id="@+id/calin"
+            android:layout_alignBottom="@+id/editText21"
+            android:layout_toRightOf="@+id/result"
+            android:layout_toEndOf="@+id/result"
+            android:layout_marginLeft="31dp"
+            android:layout_marginStart="31dp" />
+
     </RelativeLayout>
 </FrameLayout>

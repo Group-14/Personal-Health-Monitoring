@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,12 +29,14 @@ import sqlite.model.History;
  * Use the {@link journal#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class journal extends Fragment {
+public class journal extends Fragment implements View.OnClickListener{
     private ListView listView;
-    private DatabaseHelper2 db;
+    private DatabaseHelper2 db=null;
     private View lastSelectedView=null;
     private TextView stats;
     private List<History> hlist;
+    private Button save;
+    private History current;
 
     private OnFragmentInteractionListener mListener;
 
@@ -42,10 +45,7 @@ public class journal extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static journal newInstance() {
         journal fragment = new journal();
-        /*Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);*/
+
         return fragment;
     }
 
@@ -56,16 +56,16 @@ public class journal extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_journal, container, false);
+
+        save = (Button) view.findViewById(R.id.calin);
+        save.setOnClickListener(this);
 
         listView = (ListView) view.findViewById(R.id.historyList);
         //listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -103,23 +103,31 @@ public class journal extends Fragment {
                 // ListView Clicked item value
                 String history    = (String) listView.getItemAtPosition(position);
                 displayStats(itemPosition);
+                current = hlist.get(itemPosition);
                 // Show Alert
                 Log.i(TAG, "Position: " + position + "  ListItem: " + history);
-                //Toast.makeText(getApplicationContext(),
-                //        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
-                //        .show();
+
 
             }
 
         });
+
+
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        current.setcaloriesIn(Integer.parseInt(save.getText().toString()));
+        db.updateHistory(current);
     }
 
     private void displayStats(int index){
         History ayy=hlist.get(index);
+        save.setText("Calories In: "+hlist.get(index).getCaloriesIn());
         stats.setText("Results from Selected Date: "
                 + "\nRoutine: "+ayy.getRoutine()
-                + "\nCalories Burned: " + ayy.getCalories()
+                + "\nCalories Burned: " + ayy.getcaloriesOut()
                 + "\nSteps Taken: " + ayy.getSteps());
     }
 

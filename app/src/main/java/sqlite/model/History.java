@@ -5,7 +5,8 @@ package sqlite.model;
  */
 public class History {
     int id;
-    int calories;
+    int caloriesOut;
+    int caloriesIn;
     String routine;
     int steps;
     String date;
@@ -14,8 +15,9 @@ public class History {
 
     }
 
-    public History(int calories, String routine, int steps, String date){
-        this.calories=calories;
+    public History(int caloriesIn, int caloriesOut, String routine, int steps, String date){
+        this.caloriesIn=caloriesIn;
+        this.caloriesOut=caloriesOut;
         this.routine = routine;
         this.steps = steps;
         this.date = date;
@@ -25,8 +27,12 @@ public class History {
         this.id =id;
     }
 
-    public void setCalories(int calories){
-        this.calories=calories;
+    public void setcaloriesIn(int caloriesIn){
+        this.caloriesIn=caloriesIn;
+    }
+
+    public void setcaloriesOut(int caloriesOut){
+        this.caloriesOut=caloriesOut;
     }
 
     public void setRoutine(String routine) {
@@ -45,8 +51,12 @@ public class History {
         return id;
     }
 
-    public int getCalories(){
-        return calories;
+    public int getCaloriesIn(){
+        return caloriesIn;
+    }
+
+    public int getcaloriesOut(){
+        return caloriesOut;
     }
 
     public int getSteps(){
