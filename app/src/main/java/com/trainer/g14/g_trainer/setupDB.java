@@ -55,6 +55,45 @@ public class setupDB {
             exercise = db.createExercise(new Exercise("Step Ups"));
             rp = db.createRepSet(new RepSet(20, 10));
             db.createExerciseRoutine(exercise, rt, rp);
+            //leg curls
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Leg Curls"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //leg press
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Leg Press"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //leg extensions
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Leg Extensions"));
+            db.createExerciseRoutine(exercise, rt, rp);
+
+            //chest workout
+            rt = db.createRoutine(new Routine("Chest"));
+            //bench press
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Flat Bench Press"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //Incline Press
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Incline Bench Press"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //Flat Fly
+            rp = db.createRepSet(new RepSet(15, 3));
+            exercise = db.createExercise(new Exercise("Flat Bench Dumbbell Flys"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //Incline Fly
+            rp = db.createRepSet(new RepSet(15, 3));
+            exercise = db.createExercise(new Exercise("Incline Bench Dumbbell Flys"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //Decline Flys
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Decline Bench Press"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //Push Ups
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Push Ups"));
+            db.createExerciseRoutine(exercise, rt, rp);
         }
         if(db2.getHistoryCount()==0){
             db2.createHistory(new History(1000,100,"Core",50,getDateTime()));
