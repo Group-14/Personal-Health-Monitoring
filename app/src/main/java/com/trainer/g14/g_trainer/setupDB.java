@@ -1,6 +1,7 @@
 package com.trainer.g14.g_trainer;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,9 +18,10 @@ import sqlite.model.History;
  * Created by Jan on 4/1/15.
  */
 public class setupDB {
+    private static final String TAG = setupDB.class.getSimpleName();
 
-    private DatabaseHelper db;
-    private DatabaseHelper2 db2;
+    private DatabaseHelper db; //routine db
+    private DatabaseHelper2 db2; //history db
 
     public setupDB(Context context){
         // workout db
@@ -30,7 +32,7 @@ public class setupDB {
 
     public void setup(){
         // check if empty
-        if(db.getExerciseCount()==0) {
+        if(db.getExerciseCount()==0) { //only fill in db if it's empty
 
             long rt, exercise, rp;
 
@@ -95,47 +97,21 @@ public class setupDB {
             exercise = db.createExercise(new Exercise("Push Ups"));
             db.createExerciseRoutine(exercise, rt, rp);
 
-            //shoulder workout
-            rt = db.createRoutine(new Routine("Shoulders"));
-            //shoulder press
-            rp = db.createRepSet(new RepSet(10, 3));
-            exercise = db.createExercise(new Exercise("Dumbbell Shoulder Press"));
-            db.createExerciseRoutine(exercise, rt, rp);
-            //Arnoald press
-            rp = db.createRepSet(new RepSet(10, 3));
-            exercise = db.createExercise(new Exercise("Arnoald Dumbbell Press"));
-            db.createExerciseRoutine(exercise, rt, rp);
-            // Side Laterals
-            rp = db.createRepSet(new RepSet(10, 3));
-            exercise = db.createExercise(new Exercise("Dumbbell Side Laterals"));
-            db.createExerciseRoutine(exercise, rt, rp);
-            // Reverse Flys
-            rp = db.createRepSet(new RepSet(10, 3));
-            exercise = db.createExercise(new Exercise("Reverse Flys"));
-            db.createExerciseRoutine(exercise, rt, rp);
-
-            //Back workout
-            rt = db.createRoutine(new Routine("Back"));
-            //wide pull ups
-            rp = db.createRepSet(new RepSet(8, 3));
-            exercise = db.createExercise(new Exercise("Wide Grip Pull Ups"));
-            db.createExerciseRoutine(exercise, rt, rp);
-            //bent ver row
-            rp = db.createRepSet(new RepSet(10, 3));
-            exercise = db.createExercise(new Exercise("Bent Over Row"));
-            db.createExerciseRoutine(exercise, rt, rp);
-            // lat pull downs
-            rp = db.createRepSet(new RepSet(10, 3));
-            exercise = db.createExercise(new Exercise("Lat Pulldowns"));
-            db.createExerciseRoutine(exercise, rt, rp);
-
-
-
         }
+        // fill in history db if empty
         if(db2.getHistoryCount()==0){
-            db2.createHistory(new History(1000,100,"Core",50,getDateTime()));
-            db2.createHistory(new History(980,500,"Legs",50,getDateTime()));
+            db2.createHistory(new History(1000,100,"Core",50,getDateTime(2015,3,1)));
+            db2.createHistory(new History(980,500,"Legs",50,getDateTime(2015,3,10)));
+            db2.createHistory(new History(600,500,"Legs",50,getDateTime(2015,3,15)));
+            db2.createHistory(new History(550,400,"",50,getDateTime(2015,3,20)));
+            db2.createHistory(new History(550,400,"Core",50,getDateTime(2015,3,26)));
+            db2.createHistory(new History(550,400,"Core",50,getDateTime(2015,3,27)));
+            db2.createHistory(new History(550,400,"Core",50,getDateTime(2015,3,28)));
         }
+
+        //close databases
+        db.closeDB();
+        db2.closeDB();
     }
 
     /**
@@ -145,6 +121,16 @@ public class setupDB {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "EEE, MMM d, yyyy h:mm a", Locale.getDefault());
         Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+    /**
+     * get datetime
+     * */
+    private String getDateTime(int year, int month, int day) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "EEE, MMM d, yyyy h:mm a", Locale.getDefault());
+        Date date = new Date(year-1900,month,day,0,0);
         return dateFormat.format(date);
     }
 }

@@ -32,14 +32,14 @@ import sqlite.model.Routine;
  * create an instance of this fragment.
  */
 public class customize extends Fragment {
-    private ListView listView;
-    private DatabaseHelper db;
+    private ListView listView; //List view of routines
+    private DatabaseHelper db; //database object
     private View lastSelectedView=null;
     private View view;
 
     private OnFragmentInteractionListener mListener;
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = customize.class.getSimpleName();
 
 
     // TODO: Rename and change types and number of parameters
@@ -59,10 +59,6 @@ public class customize extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
     }
 
     @Override
@@ -71,12 +67,11 @@ public class customize extends Fragment {
         view = inflater.inflate(R.layout.fragment_customize, container, false);
 
         listView = (ListView) view.findViewById(R.id.routineList);
-        //listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
+        //get all routines
         List<Routine> rlist = db.getAllRoutines();
-        List<String> values = new ArrayList<String>();
+        List<String> values = new ArrayList<String>(); //list to hold the names of the routines
         for(Routine r:rlist){
-            values.add(r.getName());
+            values.add(r.getName()); //add name to values list
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
@@ -103,10 +98,8 @@ public class customize extends Fragment {
                 String routine    = (String) listView.getItemAtPosition(position);
                 // Show Alert
                 Log.i(TAG, "Position: " + position + "  ListItem: " + routine);
-                //Toast.makeText(getApplicationContext(),
-                //        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
-                //        .show();
 
+                //start the edit class and tell it which routine to edit
                 Intent intent = new Intent(getActivity(), edit.class);
                 intent.putExtra("rt", routine);
                 startActivity(intent);
@@ -136,13 +129,22 @@ public class customize extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        db=new DatabaseHelper(getActivity());
+        db=new DatabaseHelper(getActivity()); //get database
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        Log.i(TAG, "Closing Database");
+        db.closeDB(); //close db
         mListener = null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "Closing Database");
+        db.closeDB(); //close db
     }
 
     /**

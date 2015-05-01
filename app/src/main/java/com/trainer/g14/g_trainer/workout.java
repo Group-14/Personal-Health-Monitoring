@@ -35,30 +35,17 @@ import java.util.List;
  */
 public class workout extends Fragment implements View.OnClickListener{
     private View view;
-    private ListView listView;
+    private ListView listView; //list view of routines
     private View lastSelectedView=null;
-    private DatabaseHelper db;
-    private String routine=null;
+    private DatabaseHelper db; //db obj
+    private String routine=null; //routine name
 
-    public static List<exercise> workout = new ArrayList<exercise>();
+    public static List<exercise> workout = new ArrayList<exercise>(); //list of exercises for selected routine
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-
-    // TODO: Rename and change types of parameters
+    private static final String TAG = workout.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment workout.
-     */
-    // TODO: Rename and change types and number of parameters
     public static workout newInstance() {
         workout fragment = new workout();
         return fragment;
@@ -77,37 +64,18 @@ public class workout extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_workout, container, false);
+        //set up start button
         Button start = (Button) view.findViewById(R.id.start);
         start.setOnClickListener(this);
-        // Inflate the layout for this fragment
-
-
+        // setup list view of routines
         listView = (ListView) view.findViewById(R.id.routines);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
+        //get routines from db and store names of routines into another list
         List<Routine> elist = db.getAllRoutines();
         List<String> values = new ArrayList<String>();
         for(Routine q:elist){
             values.add(q.getName());
         }
-
-        // Defined Array values to show in ListView
-        /*String[] values = new String[] { "Android List View",
-                "Adapter implementation",
-                "Simple List View In Android",
-                "Create List View Android",
-                "Android Example",
-                "List View Source Code",
-                "List View Array Adapter",
-                "Android Example List View"
-        };*/
-
-
-        // Define a new Adapter
-        // First parameter - Context
-        // Second parameter - Layout for the row
-        // Third parameter - ID of the TextView to which the data is written
-        // Forth - the Array of data
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
@@ -122,22 +90,20 @@ public class workout extends Fragment implements View.OnClickListener{
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
+                //clear last selected
                 listView.setItemChecked(position, true);
                 clearSelection();
                 lastSelectedView=view;
                 view.setBackgroundColor(getResources().getColor(R.color.pressed_color));
-                // ListView Clicked item index
+
+                // item position in list view
                 int itemPosition     = position;
 
-                // ListView Clicked item value
+                //set routine name
                 routine    = (String) listView.getItemAtPosition(position);
 
                 // Show Alert
                 Log.i(TAG, "Position: " +itemPosition+"  ListItem: " +routine);
-                //Toast.makeText(getApplicationContext(),
-                //        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
-                //        .show();
 
             }
 
@@ -151,14 +117,13 @@ public class workout extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        //do what you want to do when button is clicked
+        //start the trainer class and pass it the name of the selected routine
         if(routine!=null) {
             List<Exercise> exercises = db.getAllExerciesByRoutine(routine);
             List<RepSet> repSets = db.getAllRepSetsByRoutine(routine);
             for(int q = 0; q<exercises.size(); q++){
                 workout.add(new exercise(exercises.get(q).getName(), repSets.get(q).getSets(), repSets.get(q).getReps()));
             }
-
             Intent intent = new Intent(getActivity(), trainer.class);
             intent.putExtra("rt", routine);
             startActivity(intent);
@@ -181,13 +146,22 @@ public class workout extends Fragment implements View.OnClickListener{
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        db=new DatabaseHelper(getActivity());
+        db=new DatabaseHelper(getActivity()); //get the db
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        Log.i(TAG, "Closing Database"); //close db
+        db.closeDB();
         mListener = null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "Closing Database"); //close db
+        db.closeDB();
     }
 
     /**

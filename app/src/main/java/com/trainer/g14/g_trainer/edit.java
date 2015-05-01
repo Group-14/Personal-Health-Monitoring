@@ -3,6 +3,7 @@ package com.trainer.g14.g_trainer;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,16 +20,19 @@ import sqlite.model.RepSet;
 import sqlite.model.Exercise;
 
 public class edit extends ActionBarActivity implements View.OnClickListener {
-    private DatabaseHelper db;
-    private List<Exercise> elist;
-    private List<RepSet> rslist;
-    private List<TextView> tvs = new ArrayList<TextView>();
-    private List<EditText> ets = new ArrayList<EditText>();
+    private DatabaseHelper db; //database
+    private List<Exercise> elist; //exercise list
+    private List<RepSet> rslist; //rep set list
+    private List<TextView> tvs = new ArrayList<TextView>(); //list of the text views
+    private List<EditText> ets = new ArrayList<EditText>(); //list of the edit texts
 
-    private TextView tv1,tv2,tv3,tv4,tv5,tv6,tv7,tv8,tv9,tv10;
+    private TextView tv1,tv2,tv3,tv4,tv5,tv6,tv7,tv8,tv9,tv10; //10 text views
 
-    private EditText et1,et2,et3,et4,et5,et6,et7,et8,et9,et10
+    private EditText et1,et2,et3,et4,et5,et6,et7,et8,et9,et10  //20 edit texts
             ,et11,et12,et13,et14,et15,et16,et17,et18,et19,et20;
+
+    private static final String TAG = edit.class.getSimpleName();
+
 
 
     @Override
@@ -38,16 +42,16 @@ public class edit extends ActionBarActivity implements View.OnClickListener {
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        String routine = intent.getStringExtra("rt");
+        String routine = intent.getStringExtra("rt"); //get the routine name to edit
 
         TextView name = (TextView) findViewById(R.id.name);
         name.setText(routine);
 
         db=new DatabaseHelper(getApplicationContext());
-        elist=db.getAllExerciesByRoutine(routine);
+        elist=db.getAllExerciesByRoutine(routine); //populate the lists
         rslist=db.getAllRepSetsByRoutine(routine);
 
-        //get all textviews
+        //get all textviews and add to list
         tv1=(TextView) findViewById(R.id.textView10);
         tv2=(TextView) findViewById(R.id.textView11);
         tv3=(TextView) findViewById(R.id.textView12);
@@ -69,7 +73,7 @@ public class edit extends ActionBarActivity implements View.OnClickListener {
         tvs.add(tv9);
         tvs.add(tv10);
 
-        //get all edittexts
+        //get all edittexts and add to list
         et1=(EditText) findViewById(R.id.editText);
         et2=(EditText) findViewById(R.id.editText2);
         et3=(EditText) findViewById(R.id.editText3);
@@ -111,9 +115,11 @@ public class edit extends ActionBarActivity implements View.OnClickListener {
         ets.add(et19);
         ets.add(et20);
 
+        // set the exercise name for each textview
         for(int i=0;i<elist.size();i++){
             tvs.get(i).setText(elist.get(i).getName());
         }
+        // set the already saved reps and sets into the edit texts
         int index=0;
         for(int i=0;i<rslist.size();i++){
             ets.get(index).setText(String.valueOf(rslist.get(i).getReps()));
@@ -132,7 +138,7 @@ public class edit extends ActionBarActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        //do what you want to do when button is clicked
+        //save everything into the db
         int index=0;
         for(int i=0;i<rslist.size();i++){
             RepSet rs = rslist.get(i);
@@ -143,6 +149,12 @@ public class edit extends ActionBarActivity implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "Closing Database"); //close db
+        db.closeDB();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

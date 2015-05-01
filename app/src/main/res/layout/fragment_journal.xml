@@ -43,9 +43,9 @@
             android:choiceMode="singleChoice" />
 
         <EditText
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:id="@+id/editText21"
+            android:id="@+id/calin"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="34dp"
@@ -53,6 +53,8 @@
             android:inputType="number"
             android:numeric="integer"
             android:text="Calories In"
+            android:selectAllOnFocus="true"
+            android:imeOptions="actionDone"
             android:textAlignment="center" />
 
         <Button
@@ -60,12 +62,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Enter"
-            android:id="@+id/calin"
-            android:layout_alignBottom="@+id/editText21"
-            android:layout_toRightOf="@+id/result"
-            android:layout_toEndOf="@+id/result"
-            android:layout_marginLeft="31dp"
-            android:layout_marginStart="31dp" />
+            android:id="@+id/save"
+            android:layout_alignTop="@+id/calin"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginEnd="30dp" />
 
     </RelativeLayout>
 </FrameLayout>

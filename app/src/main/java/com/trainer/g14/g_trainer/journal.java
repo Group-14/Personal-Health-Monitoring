@@ -30,17 +30,18 @@ import sqlite.model.History;
  * create an instance of this fragment.
  */
 public class journal extends Fragment implements View.OnClickListener{
-    private ListView listView;
-    private DatabaseHelper2 db=null;
+    private ListView listView; //list view of histories
+    private DatabaseHelper2 db=null; //db
     private View lastSelectedView=null;
-    private TextView stats;
-    private List<History> hlist;
-    private Button save;
-    private History current;
+    private TextView stats; // text view of stats from a history
+    private List<History> hlist; //list of histories
+    private Button save; //save button
+    private History current = null; //current history
+    private TextView calin; //calories in text view
 
     private OnFragmentInteractionListener mListener;
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = journal.class.getSimpleName();
 
     // TODO: Rename and change types and number of parameters
     public static journal newInstance() {
@@ -64,21 +65,24 @@ public class journal extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_journal, container, false);
 
-        save = (Button) view.findViewById(R.id.calin);
+        save = (Button) view.findViewById(R.id.save); //set up save button
         save.setOnClickListener(this);
 
-        listView = (ListView) view.findViewById(R.id.historyList);
+        calin = (TextView) view.findViewById(R.id.calin); //calories in text view
+
+        listView = (ListView) view.findViewById(R.id.historyList); //list view
         //listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        stats = (TextView) view.findViewById(R.id.result);
+        stats = (TextView) view.findViewById(R.id.result); //text view of stats
         stats.setText("Results from Selected Date: ");
 
-        hlist = db.getAllHistory();
-        List<String> values = new ArrayList<String>();
+        hlist = db.getAllHistory(); //get all histories
+        List<String> values = new ArrayList<String>(); //list of dates from each history
         for(int q=hlist.size()-1; q>-1; q--){
             values.add(hlist.get(q).getDate());
         }
         final int size=hlist.size()-1;
+        //display all the dates in the list view
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
@@ -92,15 +96,16 @@ public class journal extends Fragment implements View.OnClickListener{
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
+                //clear previous selection
                 listView.setItemChecked(position, true);
                 clearSelection();
                 lastSelectedView=view;
                 view.setBackgroundColor(getResources().getColor(R.color.pressed_color));
-                // ListView Clicked item index
+
+                // the list displays the items in reverse order so calculate the real index
                 int itemPosition  = size-position;
 
-                // ListView Clicked item value
+                // get the history object and display it's stats
                 String history    = (String) listView.getItemAtPosition(position);
                 displayStats(itemPosition);
                 current = hlist.get(itemPosition);
@@ -118,13 +123,18 @@ public class journal extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        current.setcaloriesIn(Integer.parseInt(save.getText().toString()));
-        db.updateHistory(current);
+        //save the user input of calories in to the selected history
+        if(current!=null && !calin.getText().toString().contains("Calories")) {
+            Log.i(TAG, "Saving Calories in");
+            current.setcaloriesIn(Integer.parseInt(calin.getText().toString()));
+            db.updateHistory(current);
+        }
     }
 
+    //display the stats of the selected history
     private void displayStats(int index){
         History ayy=hlist.get(index);
-        save.setText("Calories In: "+hlist.get(index).getCaloriesIn());
+        calin.setText("Calories In: "+hlist.get(index).getCaloriesIn());
         stats.setText("Results from Selected Date: "
                 + "\nRoutine: "+ayy.getRoutine()
                 + "\nCalories Burned: " + ayy.getcaloriesOut()
@@ -151,13 +161,22 @@ public class journal extends Fragment implements View.OnClickListener{
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        db=new DatabaseHelper2(getActivity());
+        db=new DatabaseHelper2(getActivity()); //get db
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        Log.i(TAG, "Closing Database"); //close db
+        db.closeDB();
         mListener = null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "Closing Database"); //close db
+        db.closeDB();
     }
 
     /**
