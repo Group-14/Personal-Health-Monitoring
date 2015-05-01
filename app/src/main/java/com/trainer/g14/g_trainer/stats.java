@@ -1,13 +1,26 @@
 package com.trainer.g14.g_trainer;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.games.Games;
 
 import java.util.List;
 
@@ -24,12 +37,13 @@ import sqlite.model.History;
  * create an instance of this fragment.
  */
 public class stats extends Fragment {
-    private DatabaseHelper2 db;
-    private List<History> hlist;
-
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private DatabaseHelper2 db; //db obj
+    private List<History> hlist; //history list
 
     private OnFragmentInteractionListener mListener;
+
+    private static final String TAG = stats.class.getSimpleName();
+
 
     // TODO: Rename and change types and number of parameters
     public static stats newInstance() {
@@ -49,36 +63,48 @@ public class stats extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_stats, container, false);
-        hlist = db.getAllHistory();
-        int sumcalo =0;
-        int sumcali=0;
-        int days = hlist.size();
+        hlist = db.getAllHistory(); //get all the histories
+        int sumcalo =0; //sum of calories out
+        int sumcali=0; //sum calories in
+        int steps=0; //total steps
+        int days = 0; //days working out
         for(History q:hlist){
-            sumcalo+=q.getcaloriesOut();
-            sumcali+=q.getCaloriesIn();
+            sumcalo+=q.getcaloriesOut(); //add up calories out
+            sumcali+=q.getCaloriesIn();  //add up calories in
+            steps+=q.getSteps();  //add up steps
+            if(!q.getRoutine().equals("")) days++; //add the number of histories that contain workouts
         }
-        History recent = hlist.get(hlist.size()-1);
-        String recentDate = recent.getDate();
-        String recentName = recent.getRoutine();
+        History recent;
+        int i = hlist.size();
+        if(i!=0) { //if history list is empty, dont do anything
+            do {
+                i--;
+                recent = hlist.get(i);
+            } while (recent.getRoutine().equals("") && i != 0); //get the most recent history with a routine
+            String recentDate = recent.getDate(); //get its date and routine
+            String recentName = recent.getRoutine();
 
-        TextView rn = (TextView) view.findViewById(R.id.recentName);
-        TextView rd = (TextView) view.findViewById(R.id.recentDate);
-        TextView ci = (TextView) view.findViewById(R.id.calIn);
-        TextView co = (TextView) view.findViewById(R.id.calOut);
-        TextView dw = (TextView) view.findViewById(R.id.days);
+            TextView rn = (TextView) view.findViewById(R.id.recentName);
+            TextView rd = (TextView) view.findViewById(R.id.recentDate);
+            TextView ci = (TextView) view.findViewById(R.id.calIn);
+            TextView co = (TextView) view.findViewById(R.id.calOut);
+            TextView dw = (TextView) view.findViewById(R.id.days);
+            TextView st = (TextView) view.findViewById(R.id.steps);
 
-        rn.setText("Last Workout: "+recentName);
-        rd.setText("On "+recentDate);
-        ci.setText("Caloric Intake: " + sumcali);
-        co.setText("Caloric Outake: " + sumcalo);
-        dw.setText("Days Workedout: " + days);
+            //display data
+            rn.setText("You last worked out " + recentName);
+            rd.setText("On " + recentDate);
+            ci.setText("You have taken in " + sumcali + " Calories");
+            co.setText("You have lost " + sumcalo + " Calories");
+            dw.setText("You have worked out for " + days + " days");
+            st.setText("Total Steps: " + steps);
+        }
         return view;
     }
 
@@ -101,11 +127,6 @@ public class stats extends Fragment {
         db=new DatabaseHelper2(getActivity());
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     /**
      * This interface must be implemented by activities that contain this

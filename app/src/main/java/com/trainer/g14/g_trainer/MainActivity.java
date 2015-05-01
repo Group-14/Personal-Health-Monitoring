@@ -8,18 +8,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -29,15 +25,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.fitness.Fitness;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.List;
-
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks ,home.OnFragmentInteractionListener, workout.OnFragmentInteractionListener
         , stats.OnFragmentInteractionListener, customize.OnFragmentInteractionListener, journal.OnFragmentInteractionListener{
-
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -58,8 +49,11 @@ public class MainActivity extends ActionBarActivity
     private static final String AUTH_PENDING = "auth_state_pending";
     private boolean authInProgress = false;
 
-    private static GoogleApiClient mClient = null;
+    public static GoogleApiClient mClient = null;
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    //global variable to know if google api connected
+    public static boolean connected=false;
 
     private TextView connect;
 
@@ -72,12 +66,21 @@ public class MainActivity extends ActionBarActivity
         // Setup Database
         setupDB setup=new setupDB(getApplicationContext());
         setup.setup();
+        //start notification service
+        Intent intent = new Intent(this, reminderService.class);
+        this.stopService(intent);
+        this.startService(intent);
+        //start pedometer service
+        Intent intent2 = new Intent(this, pedometerService.class);
+        this.stopService(intent2);
+        this.startService(intent2);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //setup navigation drawer
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -95,24 +98,18 @@ public class MainActivity extends ActionBarActivity
         if (savedInstanceState != null) {
             authInProgress = savedInstanceState.getBoolean(AUTH_PENDING);
         }
-
+        //fit api setup
         buildFitnessClient();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        buildFitnessClient();
+        buildFitnessClient(); //fit api stuff
+
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mClient.isConnected()) {
-            mClient.disconnect();
-        }
-    }
-
+    //fit api stuff
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_OAUTH) {
@@ -126,12 +123,14 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    //fit api stuff
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(AUTH_PENDING, authInProgress);
     }
 
+    //navigation drawer code
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
@@ -165,7 +164,7 @@ public class MainActivity extends ActionBarActivity
         }
 
     }
-
+    //update titles
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
@@ -228,45 +227,7 @@ public class MainActivity extends ActionBarActivity
     public void onFragmentInteraction(Uri uri){
 
     }
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
-    }
 
     /**
      *  Build a {@link GoogleApiClient} that will authenticate the user and allow the application
@@ -278,7 +239,7 @@ public class MainActivity extends ActionBarActivity
      */
     private void buildFitnessClient() {
         // Create the Google API Client
-        mClient = new GoogleApiClient.Builder(this)
+        mClient = new GoogleApiClient.Builder(getApplicationContext())
                 .addApi(Fitness.SENSORS_API)
                 .addApi(Fitness.RECORDING_API)
                 .addApi(Fitness.HISTORY_API)
@@ -286,6 +247,7 @@ public class MainActivity extends ActionBarActivity
                 .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
                 .addScope(new Scope(Scopes.FITNESS_BODY_READ_WRITE))
                 .addScope(new Scope(Scopes.FITNESS_LOCATION_READ))
+                //.addApi(Games.API).addScope(Games.SCOPE_GAMES)
                 .addConnectionCallbacks(
                         new GoogleApiClient.ConnectionCallbacks() {
 
@@ -294,9 +256,14 @@ public class MainActivity extends ActionBarActivity
                                 Log.i(TAG, "Connected!!!");
                                 // Now you can make calls to the Fitness APIs.
                                 // Put application specific code here.
-
-                                //connect = (TextView) findViewById(R.id.fitconnect);
-                                //connect.setText("Google Fit Status: Connected");
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        connect = (TextView) findViewById(R.id.textView9);
+                                        connect.setText("Google Fit Status: Connected");
+                                    }
+                                });
+                                connected = true;
 
                             }
 
@@ -309,8 +276,14 @@ public class MainActivity extends ActionBarActivity
                                 } else if (i == GoogleApiClient.ConnectionCallbacks.CAUSE_SERVICE_DISCONNECTED) {
                                     Log.i(TAG, "Connection lost.  Reason: Service Disconnected");
                                 }
-                                //connect = (TextView) findViewById(R.id.fitconnect);
-                                //connect.setText("Google Fit Status: Disconnected");
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        connect = (TextView) findViewById(R.id.textView9);
+                                        connect.setText("Google Fit Status: Disconnected");
+                                    }
+                                });
+                                connected = false;
                             }
                         }
                 )
@@ -320,8 +293,14 @@ public class MainActivity extends ActionBarActivity
                             @Override
                             public void onConnectionFailed(ConnectionResult result) {
                                 Log.i(TAG, "Connection failed. Cause: " + result.toString());
-                                //connect = (TextView) findViewById(R.id.fitconnect);
-                                //connect.setText("Google Fit Status: Connection Failed");
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        connect = (TextView) findViewById(R.id.textView9);
+                                        connect.setText("Google Fit Status: Failed to Connect");
+                                    }
+                                });
+                                connected = false;
                                 if (!result.hasResolution()) {
                                     // Show the localized error dialog
                                     GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(),

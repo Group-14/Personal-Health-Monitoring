@@ -23,8 +23,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Days workedout: "
-            android:id="@+id/textView8"
+            android:text="Days since last workout"
+            android:id="@+id/last"
             android:layout_marginTop="85dp"
             android:layout_below="@+id/hi"
             android:layout_centerHorizontal="true" />
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Total Calories Burned:"
+            android:text="Google Fit Status: "
             android:id="@+id/textView9"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
@@ -51,10 +51,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Google Fit Status: "
-            android:id="@+id/fitconnect"
-            android:layout_marginTop="74dp"
+            android:text="Steps Taken Today"
+            android:id="@+id/steps"
             android:layout_below="@+id/textView9"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="70dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/count"
+            android:layout_below="@+id/steps"
             android:layout_centerHorizontal="true" />
+
     </RelativeLayout>
 </FrameLayout>

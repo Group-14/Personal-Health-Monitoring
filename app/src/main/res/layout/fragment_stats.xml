@@ -22,7 +22,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="130dp"
+            android:layout_height="150dp"
             android:layout_below="@+id/calIn"
             android:layout_alignRight="@+id/recentName"
             android:layout_marginTop="77dp">
@@ -80,6 +80,14 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Days Workedout:"
                 android:id="@+id/days"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Total Steps:"
+                android:id="@+id/steps"
                 android:layout_gravity="center_horizontal" />
         </LinearLayout>
     </RelativeLayout>
