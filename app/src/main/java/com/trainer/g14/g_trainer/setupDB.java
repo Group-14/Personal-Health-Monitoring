@@ -94,6 +94,43 @@ public class setupDB {
             rp = db.createRepSet(new RepSet(10, 3));
             exercise = db.createExercise(new Exercise("Push Ups"));
             db.createExerciseRoutine(exercise, rt, rp);
+
+            //shoulder workout
+            rt = db.createRoutine(new Routine("Shoulders"));
+            //shoulder press
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Dumbbell Shoulder Press"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //Arnoald press
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Arnoald Dumbbell Press"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            // Side Laterals
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Dumbbell Side Laterals"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            // Reverse Flys
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Reverse Flys"));
+            db.createExerciseRoutine(exercise, rt, rp);
+
+            //Back workout
+            rt = db.createRoutine(new Routine("Back"));
+            //wide pull ups
+            rp = db.createRepSet(new RepSet(8, 3));
+            exercise = db.createExercise(new Exercise("Wide Grip Pull Ups"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //bent ver row
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Bent Over Row"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            // lat pull downs
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Lat Pulldowns"));
+            db.createExerciseRoutine(exercise, rt, rp);
+
+
+
         }
         if(db2.getHistoryCount()==0){
             db2.createHistory(new History(1000,100,"Core",50,getDateTime()));
