@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +23,9 @@ import sqlite.model.History;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link journal.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link journal#newInstance} factory method to
- * create an instance of this fragment.
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
  */
 public class journal extends Fragment implements View.OnClickListener{
     private ListView listView; //list view of histories
@@ -137,7 +135,7 @@ public class journal extends Fragment implements View.OnClickListener{
         calin.setText("Calories In: "+hlist.get(index).getCaloriesIn());
         stats.setText("Results from Selected Date: "
                 + "\nRoutine: "+ayy.getRoutine()
-                + "\nCalories Burned: " + ayy.getcaloriesOut()
+                + "\nCalories Burned: " + new DecimalFormat("#.##").format(ayy.getcaloriesOut())
                 + "\nSteps Taken: " + ayy.getSteps());
     }
 

@@ -25,7 +25,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.fitness.Fitness;
 
-
+/**
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
+ */
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks ,home.OnFragmentInteractionListener, workout.OnFragmentInteractionListener
         , stats.OnFragmentInteractionListener, customize.OnFragmentInteractionListener, journal.OnFragmentInteractionListener{
@@ -260,7 +264,8 @@ public class MainActivity extends ActionBarActivity
                                     @Override
                                     public void run() {
                                         connect = (TextView) findViewById(R.id.textView9);
-                                        connect.setText("Google Fit Status: Connected");
+                                        if(connect != null)
+                                            connect.setText("Google Fit Status: Connected");
                                     }
                                 });
                                 connected = true;

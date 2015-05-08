@@ -15,19 +15,22 @@ import sqlite.model.Routine;
 import sqlite.model.History;
 
 /**
- * Created by Jan on 4/1/15.
+ * written by: Jan Anthony Miranda
+ * assisted by: Basir Holland
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
  */
 public class setupDB {
     private static final String TAG = setupDB.class.getSimpleName();
 
     private DatabaseHelper db; //routine db
-    private DatabaseHelper2 db2; //history db
+    //private DatabaseHelper2 db2; //history db
 
     public setupDB(Context context){
         // workout db
         db=new DatabaseHelper(context);
         // history db
-        db2=new DatabaseHelper2(context);
+        //db2=new DatabaseHelper2(context);
     }
 
     public void setup(){
@@ -98,6 +101,7 @@ public class setupDB {
             db.createExerciseRoutine(exercise, rt, rp);
 
         }
+        /* use for testing only
         // fill in history db if empty
         if(db2.getHistoryCount()==0){
             db2.createHistory(new History(1000,100,"Core",50,getDateTime(2015,3,1)));
@@ -108,10 +112,10 @@ public class setupDB {
             db2.createHistory(new History(550,400,"Core",50,getDateTime(2015,3,27)));
             db2.createHistory(new History(550,400,"Core",50,getDateTime(2015,3,28)));
         }
-
+*/
         //close databases
         db.closeDB();
-        db2.closeDB();
+        //db2.closeDB();
     }
 
     /**

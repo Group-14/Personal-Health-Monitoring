@@ -24,12 +24,9 @@ import sqlite.model.Routine;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link customize.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link customize#newInstance} factory method to
- * create an instance of this fragment.
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
  */
 public class customize extends Fragment {
     private ListView listView; //List view of routines

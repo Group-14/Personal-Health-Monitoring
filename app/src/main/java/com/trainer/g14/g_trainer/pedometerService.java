@@ -27,7 +27,9 @@ import sqlite.helper.DatabaseHelper2;
 import sqlite.model.History;
 
 /**
- * Created by Jan on 4/28/15.
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
  */
 public class pedometerService extends Service implements OnDataPointListener {
     private DatabaseHelper2 db; //db obj
@@ -105,7 +107,7 @@ public class pedometerService extends Service implements OnDataPointListener {
 
     //remove step listener
     private void removeListener() {
-        if(!listener) return;
+        if(!listener || !mClient.isConnected()) return;
         Fitness.SensorsApi.remove(
                 mClient,
                 this)
@@ -132,9 +134,11 @@ public class pedometerService extends Service implements OnDataPointListener {
         dates d = new dates();
         if(d.compareDates(current.getDate(),d.getToday())==0){ //there is a history for today, use that
             current.setSteps(current.getSteps()+steps);
+            current.setcaloriesOut(current.getcaloriesOut() + 0.05*steps);
             db.updateHistory(current);
         }else{ //else, create a new one for today
             current=new History(0,0,"",steps,d.getToday());
+            current.setcaloriesOut(current.getcaloriesOut() + 0.05*steps);
             db.createHistory(current);
         }
 
@@ -176,36 +180,7 @@ public class pedometerService extends Service implements OnDataPointListener {
                             }
                         }
                 )
-                .addOnConnectionFailedListener(
-                        new GoogleApiClient.OnConnectionFailedListener() {
-                            // Called whenever the API client fails to connect.
-                            @Override
-                            public void onConnectionFailed(ConnectionResult result) {
-                                Log.i(TAG, "Connection failed. Cause: " + result.toString());
 
-                                if (!result.hasResolution()) {
-                                    // Show the localized error dialog
-                                    GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(),
-                                            null, 0).show();
-                                    return;
-                                }
-                                // The failure has a resolution. Resolve it.
-                                // Called typically when the app is not yet authorized, and an
-                                // authorization dialog is displayed to the user.
-                                if (!authInProgress) {
-                                    try {
-                                        Log.i(TAG, "Attempting to resolve failed connection");
-                                        authInProgress = true;
-                                        result.startResolutionForResult(null,
-                                                REQUEST_OAUTH);
-                                    } catch (IntentSender.SendIntentException e) {
-                                        Log.e(TAG,
-                                                "Exception while starting resolution activity", e);
-                                    }
-                                }
-                            }
-                        }
-                )
                 .build();
     }
 }

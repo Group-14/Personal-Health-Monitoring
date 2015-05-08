@@ -28,15 +28,11 @@ import sqlite.model.History;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link home.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link home#newInstance} factory method to
- * create an instance of this fragment.
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
  */
 public class home extends Fragment{
-    // TODO: Rename parameter arguments, choose names that match
 
     private OnFragmentInteractionListener mListener;
 
@@ -49,7 +45,6 @@ public class home extends Fragment{
     private static Thread update; //steps update thread
 
 
-    // TODO: Rename and change types and number of parameters
     public static home newInstance() {
         home fragment = new home();
         return fragment;
@@ -73,12 +68,6 @@ public class home extends Fragment{
         TextView textView = (TextView) getActivity().findViewById(R.id.welcome);
         textView.setText("Welcome "+name+"!");
 
-        //get all the history objects
-        List<History> hlist = db.getAllHistory();
-        History latest = hlist.get(hlist.size() - 1); //get latest
-        count = (TextView) getActivity().findViewById(R.id.count);
-        count.setText("" + latest.getSteps()); //set the steps count
-
         //create new thread to constantly update the text view to step count
         //every 5 seconds
         update = new Thread() {
@@ -89,17 +78,29 @@ public class home extends Fragment{
                     int oldstep = 0;
                     List<History> hlist = db.getAllHistory();
                     History current = hlist.get(hlist.size() - 1);
-                    final int step = current.getSteps();
-                    if (step != oldstep) {
+                    dates d = new dates();
+                    if(d.compareDates(current.getDate(), d.getToday())==0) {
+                        final int step = current.getSteps();
+                        if (step != oldstep) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //update textview
+                                    count = (TextView) getActivity().findViewById(R.id.count);
+                                    count.setText("" + step);
+                                }
+                            });
+                            oldstep = step;
+                        }
+                    }else{//else no steps for today yet
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 //update textview
                                 count = (TextView) getActivity().findViewById(R.id.count);
-                                count.setText("" + step);
+                                count.setText("" + 0);
                             }
                         });
-                        oldstep = step;
                     }
                     try {
                         // Sleep for 5 seconds

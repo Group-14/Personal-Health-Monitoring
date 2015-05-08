@@ -19,6 +19,11 @@ import sqlite.model.Routine;
 import sqlite.model.RepSet;
 import sqlite.model.Exercise;
 
+/**
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
+ */
 public class edit extends ActionBarActivity implements View.OnClickListener {
     private DatabaseHelper db; //database
     private List<Exercise> elist; //exercise list

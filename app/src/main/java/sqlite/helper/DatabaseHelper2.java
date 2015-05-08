@@ -1,7 +1,9 @@
 package sqlite.helper;
 
 /**
- * Created by Jan on 4/2/15.
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
  */
 
 import android.content.ContentValues;

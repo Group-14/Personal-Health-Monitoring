@@ -23,7 +23,11 @@ import java.util.Locale;
 
 import sqlite.helper.DatabaseHelper2;
 import sqlite.model.History;
-
+/**
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
+ */
 public class trainer extends ActionBarActivity {
     String routine; //routine name
     private Button cancel; //cancel button
@@ -116,10 +120,8 @@ public class trainer extends ActionBarActivity {
 
             //show pic of exercise
             ImageView picture = (ImageView) findViewById(R.id.pic);
-            Drawable[] drawables = new Drawable[]{
-                    getResources().getDrawable(R.drawable.run),
-            };
-            picture.setImageDrawable(drawables[0]);
+            Drawable pic = getPic(regiment.get(index).getName());
+            picture.setImageDrawable(pic);
         }
         //end of routine
         else {
@@ -162,9 +164,97 @@ public class trainer extends ActionBarActivity {
             case "Push Ups":
                 return 0.825*reps;
             case "Sit Ups":
-                return 1*reps;
+                return 0.7*reps;
+            case "Squats":
+                return .5*reps;
+            case "Step Ups":
+                return .6*reps;
+            case "Leg Curls":
+                return .7*reps;
+            case "Leg Press":
+                return .8*reps;
+            case "Leg Extensions":
+                return .8*reps;
+            case "Flat Bench Press":
+                return .8*reps;
+            case "Incline Bench Press":
+                return .9*reps;
+            case "Flat Bench Dumbbell Flys":
+                return .8*reps;
+            case "Incline Bench Dumbbell Flys":
+                return .9*reps;
+            case "Decline Bench Press":
+                return .9*reps;
         }
         return 0;
+    }
+
+    //get the corresponding picture
+    public Drawable getPic(String exercise){
+        Drawable[] drawables;
+        switch (exercise){
+            case "Push Ups":
+                drawables = new Drawable[]{
+                        getResources().getDrawable(R.drawable.pushups)
+                };
+                return drawables[0];
+            case "Sit Ups":
+                drawables = new Drawable[]{
+                        getResources().getDrawable(R.drawable.situp)
+                };
+                return drawables[0];
+            case "Squats":
+                drawables = new Drawable[]{
+                        getResources().getDrawable(R.drawable.squats)
+                };
+                return drawables[0];
+            case "Step Ups":
+                drawables = new Drawable[]{
+                        getResources().getDrawable(R.drawable.stepups)
+                };
+                return drawables[0];
+            case "Leg Curls":
+                drawables = new Drawable[]{
+                        getResources().getDrawable(R.drawable.legcurls)
+                };
+                return drawables[0];
+            case "Leg Press":
+                drawables = new Drawable[]{
+                        getResources().getDrawable(R.drawable.legpress)
+                };
+                return drawables[0];
+            case "Leg Extensions":
+                drawables = new Drawable[]{
+                        getResources().getDrawable(R.drawable.legextensions)
+                };
+                return drawables[0];
+            case "Flat Bench Press":
+                drawables = new Drawable[]{
+                        getResources().getDrawable(R.drawable.flatbenchpress)
+                };
+                return drawables[0];
+            case "Incline Bench Press":
+                drawables = new Drawable[]{
+                        getResources().getDrawable(R.drawable.inclinebenchpress)
+                };
+                return drawables[0];
+            case "Flat Bench Dumbbell Flys":
+                drawables = new Drawable[]{
+                        getResources().getDrawable(R.drawable.flatbenchflys)
+                };
+                return drawables[0];
+            case "Incline Bench Dumbbell Flys":
+                drawables = new Drawable[]{
+                        getResources().getDrawable(R.drawable.inclinebenchflys)
+                };
+                return drawables[0];
+            case "Decline Bench Press":
+                drawables = new Drawable[]{
+                        getResources().getDrawable(R.drawable.declinebenchpress)
+                };
+                return drawables[0];
+        }
+        return null;
     }
 
     @Override

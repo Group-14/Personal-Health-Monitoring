@@ -26,12 +26,9 @@ import java.util.List;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link workout.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link workout#newInstance} factory method to
- * create an instance of this fragment.
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
  */
 public class workout extends Fragment implements View.OnClickListener{
     private View view;
@@ -121,12 +118,13 @@ public class workout extends Fragment implements View.OnClickListener{
         if(routine!=null) {
             List<Exercise> exercises = db.getAllExerciesByRoutine(routine);
             List<RepSet> repSets = db.getAllRepSetsByRoutine(routine);
-            for(int q = 0; q<exercises.size(); q++){
+            workout.clear(); //make sure list is empty
+            for(int q = 0; q<exercises.size(); q++){ //add each exercise,rep,sets into list
                 workout.add(new exercise(exercises.get(q).getName(), repSets.get(q).getSets(), repSets.get(q).getReps()));
             }
             Intent intent = new Intent(getActivity(), trainer.class);
             intent.putExtra("rt", routine);
-            startActivity(intent);
+            startActivity(intent); //start trainer class
         }
     }
 

@@ -1,7 +1,9 @@
 package sqlite.model;
 
 /**
- * Created by Jan on 4/1/15.
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
  */
 public class Exercise {
 

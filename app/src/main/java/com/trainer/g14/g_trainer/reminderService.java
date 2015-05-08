@@ -6,6 +6,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -18,7 +20,9 @@ import sqlite.helper.DatabaseHelper2;
 import sqlite.model.History;
 
 /**
- * Created by Jan on 4/27/15.
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
  */
 public class reminderService extends Service {
     private NotificationManager mNM; //notification manager
@@ -196,6 +200,7 @@ public class reminderService extends Service {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         //build the notification
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.iconbmp);
         NotificationCompat.Builder noti = new NotificationCompat.Builder(this);
         noti.setContentTitle("It's time to workout!") //title
                 .setContentText("Touch To Workout") //subtitle
@@ -203,8 +208,8 @@ public class reminderService extends Service {
                 .setAutoCancel(true) //go away when touched
                 .setSound(Uri.parse(ringtone)) //set ringtone
                 .setVibrate(pattern) //set vibrate
-                .setSmallIcon(R.drawable.run); //set icon
-                //.setLargeIcon(R.drawable.run);
+                .setSmallIcon(R.drawable.icon); //set icon
+                //.setLargeIcon(bm);
 
 
         Log.i(TAG, "Showing notification");

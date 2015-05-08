@@ -21,7 +21,12 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.games.Games;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import sqlite.helper.DatabaseHelper2;
@@ -29,12 +34,9 @@ import sqlite.model.History;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link stats.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link stats#newInstance} factory method to
- * create an instance of this fragment.
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
  */
 public class stats extends Fragment {
     private DatabaseHelper2 db; //db obj
@@ -70,7 +72,7 @@ public class stats extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_stats, container, false);
         hlist = db.getAllHistory(); //get all the histories
-        int sumcalo =0; //sum of calories out
+        double sumcalo =0; //sum of calories out
         int sumcali=0; //sum calories in
         int steps=0; //total steps
         int days = 0; //days working out
@@ -101,10 +103,30 @@ public class stats extends Fragment {
             rn.setText("You last worked out " + recentName);
             rd.setText("On " + recentDate);
             ci.setText("You have taken in " + sumcali + " Calories");
-            co.setText("You have lost " + sumcalo + " Calories");
+            co.setText("You have lost " + new DecimalFormat("#.##").format(sumcalo) + " Calories");
             dw.setText("You have worked out for " + days + " days");
             st.setText("Total Steps: " + steps);
         }
+
+        //create graph
+        List<Double> yaxis = new ArrayList<>();
+        int count=0;
+        for(int r=hlist.size()-1; r>-1; r--){
+            yaxis.add(hlist.get(r).getcaloriesOut());
+            count++;
+            if(count==7) break;
+        }
+        GraphView graph = (GraphView) view.findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+                new DataPoint(0, yaxis.get(6).intValue()),
+                new DataPoint(1, yaxis.get(5).intValue()),
+                new DataPoint(2, yaxis.get(4).intValue()),
+                new DataPoint(3, yaxis.get(3).intValue()),
+                new DataPoint(4, yaxis.get(2).intValue()),
+                new DataPoint(5, yaxis.get(1).intValue()),
+                new DataPoint(6, yaxis.get(0).intValue()),
+        });
+        graph.addSeries(series);
         return view;
     }
 

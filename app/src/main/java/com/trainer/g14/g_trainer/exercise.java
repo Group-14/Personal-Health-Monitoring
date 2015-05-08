@@ -1,8 +1,12 @@
 package com.trainer.g14.g_trainer;
 
 /**
- * Created by Jan on 4/2/15.
+ * written by: Jan Anthony Miranda
+ * tested by: Jan Anthony Miranda
+ * debugged by: Jan Anthony Miranda
  */
+
+//Exercise object to hold name, reps, and sets
 public class exercise {
 
     String name;

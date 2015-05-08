@@ -5,10 +5,11 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 /**
- * Created by Jan on 4/28/15.
- */
+* written by: Jan Anthony Miranda
+* tested by: Jan Anthony Miranda
+* debugged by: Jan Anthony Miranda
+*/
 public class dates {
     private static final String TAG = dates.class.getSimpleName(); //for Log() when debugging
 
