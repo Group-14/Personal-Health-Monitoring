@@ -100,6 +100,70 @@ public class setupDB {
             exercise = db.createExercise(new Exercise("Push Ups"));
             db.createExerciseRoutine(exercise, rt, rp);
 
+<<<<<<< HEAD
+            //shoulder workout
+            rt = db.createRoutine(new Routine("Shoulders"));
+            //shoulder press
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Dumbbell Shoulder Press"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //Arnoald press
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Arnoald Dumbbell Press"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            // Side Laterals
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Dumbbell Side Laterals"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            // Reverse Flys
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Reverse Flys"));
+            db.createExerciseRoutine(exercise, rt, rp);
+
+            //Back workout
+            rt = db.createRoutine(new Routine("Back"));
+            //wide pull ups
+            rp = db.createRepSet(new RepSet(8, 3));
+            exercise = db.createExercise(new Exercise("Wide Grip Pull Ups"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //bent ver row
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Bent Over Row"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            // lat pull downs
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Lat Pulldowns"));
+            db.createExerciseRoutine(exercise, rt, rp);
+
+            //Arms workout
+            rt = db.createRoutine(new Routine("Arms"));
+            //dumbbell curls
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Alt Dubbell Curls"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //Preacher Curls
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Preacher Curls"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //21's
+            rp = db.createRepSet(new RepSet(21, 3));
+            exercise = db.createExercise(new Exercise("21"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //Press Downs
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Stright Bar Pressdowns"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //Dumbbell Kick Backs
+            rp = db.createRepSet(new RepSet(6, 3));
+            exercise = db.createExercise(new Exercise("Dumbbell Kickbacks"));
+            db.createExerciseRoutine(exercise, rt, rp);
+            //Dips
+            rp = db.createRepSet(new RepSet(10, 3));
+            exercise = db.createExercise(new Exercise("Dips"));
+            db.createExerciseRoutine(exercise, rt, rp);
+
+=======
+>>>>>>> origin/master
         }
         /* use for testing only
         // fill in history db if empty
